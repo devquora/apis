@@ -21,18 +21,21 @@ $router->get('/generate', function () {
 Route::group(['prefix'=>'api','as'=>'api.'], function(){
 	Route::post('/authenticate', 'UserController@authenticate');
 	Route::post('/users', 'UserController@create');
+	Route::post('/forgot-pass', 'UserController@forgotPass');
 	Route::get('/search', 'PostController@search');
 	Route::post('/users/star-profile', ['middleware'=>'auth','uses'=>'UserController@starProfile']);
 	Route::get('/user-profile', ['middleware'=>'auth','uses'=>'UserController@userProfile']);
 	Route::post('/users/follow', ['middleware'=>'auth','uses'=>'UserController@follow']);
 	Route::post('/users/join-wall', ['middleware'=>'auth','uses'=>'UserController@joinWall']);
-	Route::post('/users', ['middleware'=>'auth','uses'=>'WallController@create']);
+/*	Route::post('/users', ['middleware'=>'auth','uses'=>'WallController@create']);*/
 	Route::put('/users/{id}', ['middleware'=>'auth','uses'=>'UserController@updateProfile']);
+	Route::post('/walls', ['middleware'=>'auth','uses'=>'WallController@create']);
 	Route::get('/walls', ['middleware'=>'auth','uses'=>'WallController@list']);
 	Route::get('/walls/popular', 'WallController@getPopularWalls');
 	Route::get('/get-front-walls', 'WallController@getAllWalls');
 	Route::get('/walls/get-walls', 'WallController@getWalls');
 	Route::get('/walls/{slug}', ['middleware'=>'auth','uses'=>'WallController@edit']);
+	Route::get('user-walls', ['middleware'=>'auth','uses'=>'WallController@myWalls']);
 	Route::get('/walls/search/{slug}', ['middleware'=>'auth','uses'=>'WallController@searchWalls']);
 	Route::put('/walls/{id}', ['middleware'=>'auth','uses'=>'WallController@update']);
 	Route::get('/walls/details/{slug}', 'WallController@getWallDetails');
