@@ -1,0 +1,268 @@
+
+	<div class="row">
+	<div class="col-md-1 col-xs-1"></div>
+	<div class="col-md-10 col-xs-8" style="margin-bottom:40px" >
+	  <h2 class="text-left">{{model.title}} </h2>
+	  
+	  <div class="share">
+				<p>
+					Share
+				</p>
+				<share-buttons [showCount]="true" ></share-buttons>
+      </div>
+	   <div [innerHTML]="model.content" *ngIf="model.content"></div>
+	  <div class="action-btn">
+	   <app-sharelink></app-sharelink>
+	   
+	   <a title="Write an Article" rel="tooltip" class="btn btn-default btn-round btn-md btn-icon" [routerLink]="['/posts/add']" >
+                        Write an Article
+       </a>
+	  <a title="Post a Question" rel="tooltip" class="btn btn-default btn-round btn-md btn-icon"  [routerLink]="['/questions/ask']" >
+			Post a Question
+	  </a>
+	  </div>
+	</div>
+	</div>
+
+	<div class="row feeds">
+	
+    <div class="col-md-1 col-xs-1"></div>
+	<div class="col-md-7  col-xs-7">
+	 <h1 class="text-left">Recent articles on {{model.title}} </h1>	
+
+	<div class="row" *ngFor="let article of articles.data" style="margin-bottom:40px">
+        <!--<div class="col-md-2 col-xs-12">
+			<div class="share"  >
+			  Share
+				<share-buttons *ngIf="(article.type=='article' || article.type=='link')" [showCount]="true" [url]="frontend_url+'/articles/'+article.slug" ></share-buttons>
+				<share-buttons *ngIf="article.type=='question'" [showCount]="true" [url]="frontend_url+'/qa/'+article.slug" ></share-buttons>
+			</div>
+		</div>-->
+				<!-- Begin Post -->
+		<div class="col-md-12 col-xs-12">
+			
+										<!-- Begin Top Meta -->
+				<div class="row post-top-meta" style="margin-bottom:0px">
+					<div class="col-md-2">
+						<a [routerLink]="['/users',article.user.username]">
+						<img *ngIf="article.user.user_profile.image" class="author-thumb img-thumb-round" [src]="backend_url+'/images/users/thumbs/'+article.user.user_profile.image" alt="{{article.user.username}}" >
+						<img *ngIf="!article.user.user_profile.image" class="author-thumb" [src]="backend_url+'/images/users/default_user.png'" alt="{{article.user.username}}" >
+						
+						</a>
+						
+					</div>
+					<div class="col-md-10">
+						<a class="link-dark username" [routerLink]="['/users',article.user.username]">{{article.user.username}}</a>
+						<!--<a href="javascript:void(0)" (click)="follow(article.user.id)" class="btn follow"><span *ngIf="!article.following"><i class="fa fa-spotify" aria-hidden="true"></i>Follow</span><span *ngIf="article.following"><i class="fa fa-check" aria-hidden="true"></i>Unfollow</span></a>-->
+						<span class="author-description">{{article.user.user_profile.bio}}</span>
+						<span class="post-date">Posted On: {{article.updated_at | date:shortDate}}</span><span class="dot"></span>
+						<span>{{article.views}} Views</span>
+						
+					</div>
+				</div>
+				<!-- End Top Menta -->
+			
+			<div class="mainheading">
+
+
+
+			<h2 class="posttitle"><a *ngIf="(article.type=='article' || article.type=='link') " [routerLink]="['/articles',article.slug]" title="{{article.title}}">{{article.title}}</a>
+			<a *ngIf="article.type=='question'" [routerLink]="['/qa',article.slug]" title="{{article.title}}">{{article.title}}</a>
+			</h2>
+				<span  class="label follow" *ngFor="let wall of article.walls"><a [routerLink]="['/',wall.slug]">{{wall.title}}</a></span>
+			</div>
+
+			<!-- Begin Featured Image -->
+			<img class="featured-image img-fluid" [src]="backend_url+'/images/articles/thumbs/730x485'+article.image" *ngIf="article.image" alt="{{article.title}}">
+			<!-- End Featured Image -->
+
+			<!-- Begin Post Content -->
+			<div class="article-post" [innerHTML]="article.content|slice:0:200">
+				
+			</div>
+			
+			<span class="post-read-more" *ngIf="article.type=='article'" ><a  [routerLink]="['/articles',article.slug]" title="{{article.title}}"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+
+			
+			<span class="post-read-more" *ngIf="article.type=='question'"><a  [routerLink]="['/qa',article.slug]" title="{{article.title}}"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>	
+			<!-- End Post Content -->
+
+			<!-- Begin Tags -->
+			<div class="after-post-tags">
+				<ul class="tags">
+				
+				<li *ngFor="let tag of article.tags"><a [routerLink]="['/tag/',tag.slug]">{{tag.title}}</a></li>
+				</ul>
+			</div>
+			
+			<!-- End Tags -->
+			<!-- Begin Tags -->
+			<div class="after-post-icons">
+			<ul>
+			<li>
+		
+			 <span  class="btn btn-default stat-item ">
+                            <i class="fa fa-comments icon"></i> {{article.comments_count}}
+                </span>
+		   
+			</li>
+			<app-likedislike [id]="article.id" [likeCount]="article.likes_count" [dislikeCount]="article.dislikes_count"   ></app-likedislike>
+		
+			</ul>	
+			
+			</div>
+			<!-- End Tags -->
+
+			
+		</div>
+		<!-- End Post -->
+</div>
+	
+	<div class="search-results" infiniteScroll
+		    [infiniteScrollDistance]="2"
+		    [infiniteScrollThrottle]="50"
+		     (scrolled)="onScrollDown()">
+			 <span class="loader" *ngIf="loading">
+			 Loading Feeds
+			 <img src="/assets/img/loader.gif" >
+			 </span>
+
+	</div>
+	<div [innerHTML]="model.features" *ngIf="model.features"></div>
+	</div>
+	<div class="col-md-4 col-xs-4">
+    <div class="panel panel-primary share-box">
+	<div class="panel-heading">
+		<h4 class="panel-title"> </h4>
+	</div>
+	<div class="panel-body">   
+			<div class="profile-page">
+	<div class="page-header page-header-small" filter-color="orange">
+            <!--<div class="page-header-image" data-parallax="true" style="background-image: url('http://demos.creative-tim.com/now-ui-kit/assets/img/bg5.jpg');">
+            </div>-->
+				
+			
+	
+            <div class="container">
+                <div class="content-center">
+                    <div class="photo-container">
+                        <img *ngIf="model.image" [src]="backend_url+'/images/walls/thumbs/70x70' + model.image" alt="{{ model.title}}">
+                    </div>
+                    <h2 class="title">{{model.title}}</h2>
+                   <!-- <p class="category">Photographer</p>-->
+                    <div class="content">
+                        <div class="social-description">
+                            <h4>{{model.users_count}}</h4>
+                            <p>Members</p>
+                        </div>
+                        <div class="social-description">
+                            <h4>{{model.posts_count}}</h4>
+                            <p>Articles</p>
+                        </div>
+                        <div class="social-description">
+                            <h4>{{model.questions_count}}</h4>
+                            <p>Questions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ </div>
+ <div class="container">
+                <div class="button-container">
+                   
+                    <a title="Write an Article" rel="tooltip" class="btn btn-default btn-round btn-md btn-icon" [routerLink]="['/posts/add']" >
+                        Write an Article
+                    </a>
+                    <a title="Post a Question" rel="tooltip" class="btn btn-default btn-round btn-md btn-icon"  [routerLink]="['/questions/ask']" >
+                        Post a Question
+                    </a>
+                </div>
+                    <div class="description">
+						<app-joinwall *ngIf="model.id" [id]='model.id'  ></app-joinwall>
+					</div>
+					</div>
+	
+	</div>
+
+	</div>
+	</div>
+	<div class="panel panel-primary">
+	<div class="panel-heading">
+	<h4 class="panel-title">Sort By: </h4>
+	</div>
+	<div class="panel-body">   
+
+	<input type="radio" name="sort" checked value="recent" />Recent
+	<input type="radio" name="sort" value="popular" />Most Viewed 
+
+	</div>
+	</div>	
+	<div class="panel panel-primary">
+	<div class="panel-heading">
+	<h4 class="panel-title">Filter: </h4>
+	</div>
+	<div class="panel-body">   
+
+	<input type="checkbox" name="sort" checked value="recent" />All
+	<input type="checkbox" name="sort" value="popular" />Articles 
+	<input type="checkbox" name="sort" value="popular" />Links 
+	<input type="checkbox" name="sort" value="popular" />Questions 
+
+	</div>
+	</div>	
+
+
+	<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">Popular Walls </h4>
+    </div>
+    <div class="panel-body row">   
+
+	<div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 contibuters" *ngFor="let wall of popularWalls">
+		<a [routerLink]="['/'+wall.slug]">
+			<img class="img-fluid img-thumb img-thumb-round" [src]="backend_url+'/images/walls/thumbs/70x70'+wall.image" *ngIf="wall.image" alt="{{wall.title}}" style="margin-bottom:5px">
+		</a>
+		<div class="username" title="{{wall.title}}">{{wall.title}}</div>
+    </div>
+	</div>
+  </div>
+   	<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">Top Contributers </h4>
+    </div>
+    <div class="panel-body row">  
+
+		<div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 contibuters" *ngFor="let user of topContributers.users">
+			 <a [routerLink]="['/users',user.username]">   <img *ngIf="user.user_profile.image" class="img-fluid img-thumb img-thumb-round" [src]="backend_url+'/images/users/thumbs/'+user.user_profile.image" alt="{{user.username}}" >
+										<img *ngIf="!user.user_profile.image" class="img-fluid img-thumb img-thumb-round" [src]="backend_url+'/images/users/default_user.png'" alt="{{user.username}}" >
+
+					</a>
+													<div class="username" title="{{user.username}}">{{user.username}}</div>
+		</div>	
+
+  
+	</div>
+  </div>
+<!--  	<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">Tag Cloud </h4>
+    </div>
+    <div class="panel-body">   
+	<div class="media" *ngFor="let wall of popularWalls" style="display:inline;">
+		<a [routerLink]="['/'+wall.slug]">
+			<img class="img-fluid img-thumb img-thumb-round" [src]="backend_url+'/images/walls/thumbs/70x70'+wall.image" *ngIf="wall.image" alt="{{wall.title}}" style="margin-bottom:5px">
+		</a>
+  </div>
+	</div>
+  </div>--->
+  	<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">Follow Us </h4>
+    </div>
+    <div class="panel-body">   
+			<app-socialbox></app-socialbox>
+	</div>
+  </div>
+  
+	</div>
+	</div>
